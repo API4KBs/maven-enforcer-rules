@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.mock</groupId>
+  <artifactId>inv_versionVariable</artifactId>
+  <version>0.0.1</version>
+
+  <properties>
+    <kmdp.foo.version>0.0.1</kmdp.foo.version>
+    <kmdp.mock.version>[0.0.0,)</kmdp.mock.version>
+    <kmdp.ill.version>1.0</kmdp.ill.version>
+    <third.party.version>3.5.0</third.party.version>
+    <third.party.versionRange>(0.0.0,0.3.0)</third.party.versionRange>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.6</version>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
