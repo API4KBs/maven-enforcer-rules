@@ -38,7 +38,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 public class VersionRangeRule
     implements EnforcerRule {
 
-  private static final String PATTERN = "\\d+\\.\\d+\\.\\d+(\\.+)?";
+  private static final String PATTERN = "\\d+\\.\\d+\\.\\d+(.+)?";
 
   public void execute(EnforcerRuleHelper helper)
       throws EnforcerRuleException {
@@ -257,6 +257,7 @@ public class VersionRangeRule
     }
     if (groupId.startsWith("edu.mayo")) {
       if (!version.matches(PATTERN)) {
+
         localIssues.add(
             new VersionRangeIssue(kind,
                 artifactId,
