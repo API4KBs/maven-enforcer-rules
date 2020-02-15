@@ -4,29 +4,20 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-
+  <!-- Project GAV -->
   <groupId>edu.mayo.kmdp</groupId>
-  <artifactId>kmdp-mvn-enforcer-rules</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+
+  <!-- Project Packaging -->
   <packaging>jar</packaging>
-  <version>1.0.2</version>
 
-
-  <name>KMDP :: Maven Quality Enforcement Rules</name>
-
-  <properties>
-    <api.version>3.0.0-M2</api.version>
-    <maven.version>3.3.9</maven.version>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
-
+  <!-- Project Dependencies -->
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.enforcer</groupId>
       <artifactId>enforcer-api</artifactId>
       <version>${api.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
@@ -42,13 +33,11 @@
       <artifactId>maven-plugin-api</artifactId>
       <version>${maven.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
       <version>1.7.1</version>
     </dependency>
-
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-aether-provider</artifactId>
@@ -63,5 +52,28 @@
     </dependency>
   </dependencies>
 
+  <!-- Project Properties -->
+  <properties>
+    <api.version>3.0.0-M2</api.version>
+    <maven.version>3.3.9</maven.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <!-- Project Information -->
+  <name>KMDP :: Maven Quality Enforcement Rules</name>
+  <description>Maven Enforcement Rules to Ensure Quality in KMDP Libraries</description>
+  <organization>
+    <name>Mayo Clinic</name>
+    <url>https://www.mayoclinic.org/</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>davide_sottara</id>
+      <name>Davide Sottara</name>
+      <email>sottara.davide@mayo.edu</email>
+      <organization>Mayo Clinic</organization>
+    </developer>
+  </developers>
 
 </project>
