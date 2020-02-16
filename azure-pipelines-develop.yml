@@ -1,5 +1,6 @@
 ### Develop Pipeline
 ### Develop Snapshot Branch X.X.X-SNAPSHOT
+### Project :: KMDP MVN Enforcer Rules
 
 trigger:
 - develop
@@ -15,6 +16,7 @@ steps:
 # STARTER STEP
 - script: |
     echo Starting KMDP Develop Branch!
+    echo Project :: KMDP MVN Enforcer Rules
   displayName: 'Pipeline Started'
 
 # STEP 1: Read POM File and Set GAV Variables
@@ -92,5 +94,5 @@ steps:
 
 # ENDING STEP
 - script: |
-    echo Ending Release Candidate!
+    echo Ending Develop Branch Pipeline!
   displayName: 'Pipeline Ended' 
