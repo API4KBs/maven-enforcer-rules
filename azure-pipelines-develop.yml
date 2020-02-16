@@ -54,7 +54,7 @@ steps:
       Write-Host --------------------------------
       Write-Host Variable Group:
       Write-Host Dev Version: $env:DEV_VERSION
-      Write-Host Next Version: $env:NEXT_VERSION
+      Write-Host MVN Enforcer Rules Version: $env:MVN_ENFORCER_RULES_VERSION
       Write-Host Master Version: $env:MASTER_VERSION
       Write-Host Release Version: $env:RELEASE_VERSION
   env: 
@@ -62,7 +62,7 @@ steps:
     ARTIFACT_ID: $(projectArtifactId)
     PROJECT_SNAPSHOT_VERSION: $(projectSnapShotVersion)
     GROUP_ID: $(projectGroupId)
-    NEXT_VERSION: $(nextVersion)
+    MVN_ENFORCER_RULES_VERSION: $(mvnEnforcerRulesVersion)
     DEV_VERSION: $(devVersion)
     MASTER_VERSION: $(masterVersion)
     RELEASE_VERSION: $(releaseVersion)
