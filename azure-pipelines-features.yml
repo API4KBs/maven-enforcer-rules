@@ -1,6 +1,7 @@
 ### Feature Pipeline
 ### Feature Snapshot Branch X.X.X-SNAPSHOT
 ### No deployments to artifacts
+### Project :: KMDP MVN Enforcer Rules
 
 trigger:
 - feature*
@@ -16,6 +17,7 @@ steps:
 # STARTER STEP
 - script: |
     echo Starting KMDP Feature Branch Pipeline!
+    echo Project :: KMDP MVN Enforcer Rules
   displayName: 'Pipeline Started'
 
 # STEP 1: Read POM File and Set GAV Variables
@@ -53,7 +55,7 @@ steps:
       Write-Host --------------------------------
       Write-Host Variable Group:
       Write-Host Dev Version: $env:DEV_VERSION
-      Write-Host Next Version: $env:NEXT_VERSION
+      Write-Host MVN Enforcer Rules Version: $env:MVN_ENFORCER_RULES_VERSION
       Write-Host Master Version: $env:MASTER_VERSION
       Write-Host Release Version: $env:RELEASE_VERSION
   env: 
@@ -61,7 +63,7 @@ steps:
     ARTIFACT_ID: $(projectArtifactId)
     PROJECT_SNAPSHOT_VERSION: $(projectSnapShotVersion)
     GROUP_ID: $(projectGroupId)
-    NEXT_VERSION: $(nextVersion)
+    MVN_ENFORCER_RULES_VERSION: $(mvnEnforcerRulesVersion)
     DEV_VERSION: $(devVersion)
     MASTER_VERSION: $(masterVersion)
     RELEASE_VERSION: $(releaseVersion)
@@ -80,7 +82,7 @@ steps:
   inputs:
     artifactsFeeds: 'KMD'
 
-# STEP 5 Test Maven to AzDo KMD Artifacts
+# STEP 5 Maven Clean Test to AzDo KMD Artifacts
 - task: Maven@3
   displayName: 'Maven Clean Test'
   inputs:
