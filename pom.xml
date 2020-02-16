@@ -63,7 +63,7 @@
 
   <!-- Project Information -->
   <name>KMDP :: Maven Quality Enforcement Rules</name>
-  <description>Maven Enforcement Rules to Ensure Quality in KMDP Libraries</description>
+  <description>Custom rules for the Maven Enforcer Plugin that validate a release candidate POM's compliance (no SNAPSHOTS, version ranges, etc.)</description>
   <organization>
     <name>Mayo Clinic</name>
     <url>https://www.mayoclinic.org/</url>
