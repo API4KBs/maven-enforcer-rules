@@ -25,7 +25,7 @@ steps:
     targetType: 'inline'
     script: |
       [xml]$pomXml = Get-Content .\pom.xml
-      Write-Host ---- Group Id, Artifact Id, Version (GAV) ----
+      Write-Host ---- Group Id, Artifact Id, Version ----
       Write-Host GroupId: $pomXml.project.groupId
       Write-Host ArtifactId: $pomXml.project.artifactId
       Write-Host Version: $pomXml.project.version
