@@ -1,22 +1,47 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
-trigger:
-- master
+### Master Pipeline
+### Master Branch X.X.X
+### Project :: KMDP MVN Enforcer Rules
 
 pool:
   vmImage: 'ubuntu-latest'
 
+variables: 
+- group: kmdp-platform-variables
+
 steps:
+
+# STARTER STEP
+- script: |
+    echo Starting KMDP Master Branch!
+    echo Project :: KMDP MVN Enforcer Rules
+  displayName: 'Pipeline Steps Started'
+
+# STEP 3 SLM Versioning Policy
+- task: AlmVersioning@4
+  displayName: 'SLM Update Version and Build Number'
+  inputs:
+    projectType: java
+    versionFilePath: pom.xml
+    versionTransformation: none
+
+# STEP 4 Authenticate to Maven Feed 
+- task: MavenAuthenticate@0
+  displayName: 'Maven Authenticate'
+  inputs:
+    artifactsFeeds: 'KMD'
+
+# STEP 5 Deploy Maven to AzDo KMD Artifacts
 - task: Maven@3
+  displayName: 'Maven Deploy to KMD Artifacts'
   inputs:
     mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
+    goals: 'deploy'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    options: '-DaltDeploymentRepository=KMD::default::https://pkgs.dev.azure.com/mclm/_packaging/KMD/maven/v1'
+
+# ENDING STEP
+- script: |
+    echo Ending Master Branch Pipeline!
+  displayName: 'Pipeline Ended' 
