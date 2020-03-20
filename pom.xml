@@ -12,6 +12,31 @@
   <!-- Project Packaging -->
   <packaging>jar</packaging>
 
+  <!-- Project Information -->
+  <name>KMDP :: Maven Quality Enforcement Rules</name>
+  <description>Custom rules for the Maven Enforcer Plugin that validate a release candidate POM's compliance (no SNAPSHOTS, version ranges, etc.)</description>
+
+  <organization>
+    <name>Mayo Clinic</name>
+    <url>https://www.mayoclinic.org/</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>davide_sottara</id>
+      <name>Davide Sottara</name>
+      <email>sottara.davide@mayo.edu</email>
+      <organization>Mayo Clinic</organization>
+    </developer>
+  </developers>
+
+  <!-- Project Properties -->
+  <properties>
+    <api.version>3.0.0-M2</api.version>
+    <maven.version>3.3.9</maven.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  
   <!-- Project Dependencies -->
   <dependencies>
     <dependency>
@@ -48,33 +73,8 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.4.0</version>
+      <version>5.5.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <!-- Project Properties -->
-  <properties>
-    <api.version>3.0.0-M2</api.version>
-    <maven.version>3.3.9</maven.version>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
-
-  <!-- Project Information -->
-  <name>KMDP :: Maven Quality Enforcement Rules</name>
-  <description>Custom rules for the Maven Enforcer Plugin that validate a release candidate POM's compliance (no SNAPSHOTS, version ranges, etc.)</description>
-  <organization>
-    <name>Mayo Clinic</name>
-    <url>https://www.mayoclinic.org/</url>
-  </organization>
-  <developers>
-    <developer>
-      <id>davide_sottara</id>
-      <name>Davide Sottara</name>
-      <email>sottara.davide@mayo.edu</email>
-      <organization>Mayo Clinic</organization>
-    </developer>
-  </developers>
-
 </project>

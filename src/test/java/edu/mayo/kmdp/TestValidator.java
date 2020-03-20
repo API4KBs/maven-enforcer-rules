@@ -21,7 +21,6 @@ public class TestValidator {
 
     VersionRangeReport issues = rule.validateProject(p);
 
-    //System.out.println(issues);
     assertEquals(4, issues.size());
 
     VersionRangeIssue issue = issues.getIssue("version", RelatedArtifactKind.PARENT)
@@ -38,7 +37,6 @@ public class TestValidator {
 
     VersionRangeReport issues = rule.validateProject(p);
 
-    //System.out.println(issues);
     assertEquals(3, issues.size());
 
     VersionRangeIssue issue1 = issues.getIssue("third.party.versionRange", RelatedArtifactKind.SELF)
@@ -63,7 +61,6 @@ public class TestValidator {
 
     VersionRangeReport issues = rule.validateProject(p);
 
-    //System.out.println(issues);
     assertEquals(3, issues.size());
 
     VersionRangeIssue issue1 = issues.getIssue("version", RelatedArtifactKind.MGM_DEPENDENCY)
@@ -79,7 +76,6 @@ public class TestValidator {
 
     VersionRangeReport issues = rule.validateProject(p);
 
-    //System.out.println(issues);
     assertEquals(5, issues.size());
 
     VersionRangeIssue issue1 = issues.getIssue("version", RelatedArtifactKind.MGM_DEPENDENCY)
@@ -109,7 +105,6 @@ public class TestValidator {
 
     VersionRangeReport issues = rule.validateProject(p);
 
-    //System.out.println(issues);
     assertEquals(3, issues.size());
 
     VersionRangeIssue issue1 = issues.getIssue("org.foo:fake_plugin",
@@ -131,7 +126,6 @@ public class TestValidator {
 
     VersionRangeReport issues = rule.validateProject(p);
 
-    //System.out.println(issues);
     assertEquals(7, issues.size());
 
     VersionRangeIssue issue1 = issues.getIssue("org.foo:fake_plugin",
@@ -166,7 +160,6 @@ public class TestValidator {
 
     VersionRangeReport issues = rule.validateProject(p);
 
-    //System.out.println(issues);
     assertEquals(3, issues.size());
 
     VersionRangeIssue issue1 = issues.getIssue("org.mock:mockPluginDep2",
@@ -190,7 +183,6 @@ public class TestValidator {
 
     VersionRangeReport issues = rule.validateProject(p);
 
-    //System.out.println(issues);
     assertEquals(2, issues.size());
   }
 
@@ -201,7 +193,16 @@ public class TestValidator {
 
     VersionRangeReport issues = rule.validateProject(p);
 
-    System.out.println(issues);
     assertEquals(1, issues.size());
+  }
+
+
+  @Test
+  public void testManagedSnapshots() {
+    MavenProject p = maven.getProject("org.foo:snapParent:1.0.0:pom");
+
+    VersionRangeReport issues = rule.validateProject(p);
+
+    assertEquals(8, issues.size());
   }
 }

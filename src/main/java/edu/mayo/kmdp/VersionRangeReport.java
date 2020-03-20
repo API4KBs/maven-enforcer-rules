@@ -40,7 +40,7 @@ public class VersionRangeReport {
       final String variable,
       final RelatedArtifactKind kind) {
     return issues.stream()
-        .filter((issue) -> variable.equals(issue.getVariable()) && kind == issue.getKind())
+        .filter(issue -> variable.equals(issue.getVariable()) && kind == issue.getKind())
         .findFirst();
   }
 
@@ -55,7 +55,7 @@ public class VersionRangeReport {
     final String nameFilter = tok.nextToken();
 
     return issues.stream()
-        .filter((issue) -> variable.equals(issue.getVariable())
+        .filter(issue -> variable.equals(issue.getVariable())
             && kind == issue.getKind()
             && (nameFilter == null || nameFilter.equals(issue.getArtifactId()))
         ).findFirst();

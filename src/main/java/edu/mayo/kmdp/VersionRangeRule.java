@@ -39,16 +39,14 @@ public class VersionRangeRule
     implements EnforcerRule {
 
   private static final String PATTERN = "\\d+\\.\\d+\\.\\d+(.+)?";
+  private static final String VERSION = "version";
 
   public void execute(EnforcerRuleHelper helper)
       throws EnforcerRuleException {
 
-//    Log log = helper.getLog();
-
     try {
       // get the various expressions out of the helper.
       MavenProject project = (MavenProject) helper.evaluate("${project}");
-//      MavenSession session = (MavenSession) helper.evaluate("${session}");
 
       VersionRangeReport issues = validateProject(project);
 
@@ -81,28 +79,28 @@ public class VersionRangeRule
     }
 
     project.getProperties().keySet().stream()
-        .filter((k) -> k.toString().contains(".version"))
+        .filter(k -> k.toString().contains(".version"))
         .map(Object::toString)
-        .forEach((p) ->
+        .forEach(p ->
             validateVersionProperty(project.getArtifactId(), p,
                 project.getProperties().getProperty(p), SELF, issues));
 
-    project.getDependencies().forEach((dep) ->
+    project.getDependencies().forEach(dep ->
         validateDependency(dep, DEPENDENCY, issues));
 
     if (project.getDependencyManagement() != null) {
-      project.getDependencyManagement().getDependencies().forEach((dep) ->
+      project.getDependencyManagement().getDependencies().forEach(dep ->
           validateDependency(dep, MGM_DEPENDENCY, issues));
     }
 
     if (project.getPluginManagement() != null) {
       project.getPluginManagement().getPlugins()
-          .forEach((mgPlugin) -> validatePlugin(mgPlugin, MGM_PLUGIN, issues));
+          .forEach(mgPlugin -> validatePlugin(mgPlugin, MGM_PLUGIN, issues));
     }
 
     if (project.getBuildPlugins() != null) {
       project.getBuildPlugins()
-          .forEach((plugin) -> validatePlugin(plugin, PLUGIN, issues));
+          .forEach(plugin -> validatePlugin(plugin, PLUGIN, issues));
     }
 
     // plugin arguments
@@ -152,12 +150,12 @@ public class VersionRangeRule
       VersionRangeReport localIssues) {
 
     if (plugin.getDependencies() != null) {
-      plugin.getDependencies().forEach((dep) -> validateDependency(dep, PLUGIN_DEP, localIssues));
+      plugin.getDependencies().forEach(dep -> validateDependency(dep, PLUGIN_DEP, localIssues));
     }
 
     validateConfiguration(plugin.getConfiguration(),plugin,localIssues);
     if (plugin.getExecutions() != null) {
-      plugin.getExecutions().forEach((exec) -> validateConfiguration(exec.getConfiguration(),plugin,localIssues));
+      plugin.getExecutions().forEach(exec -> validateConfiguration(exec.getConfiguration(),plugin,localIssues));
     }
 
     if (plugin.getVersion() != null) {
@@ -166,7 +164,7 @@ public class VersionRangeRule
     } else {
       localIssues.add(new VersionRangeIssue(kind,
           plugin.getArtifactId(),
-          "version",
+          VERSION,
           "LATEST (implicit)",
           "Unable to detect version of plugin " + kind + " "
               + plugin.getGroupId() + ":" + plugin.getArtifactId()
@@ -183,14 +181,14 @@ public class VersionRangeRule
   }
 
   private void validateDom(Xpp3Dom dom, Plugin plugin, VersionRangeReport localIssues) {
-    if ("version".equals(dom.getName())) {
+    if (VERSION.equals(dom.getName())) {
       validateVersionProperty(plugin.getArtifactId(), dom.getName(), dom.getValue(), PLUGIN_ARG,
           localIssues);
     }
     if (dom.getValue() != null) {
       validateConfigVersionProperty(dom.getName(),dom.getValue(),plugin,localIssues);
     } else {
-      Arrays.stream(dom.getChildren()).forEach((child) -> validateDom(child, plugin, localIssues));
+      Arrays.stream(dom.getChildren()).forEach(child -> validateDom(child, plugin, localIssues));
     }
   }
 
@@ -221,7 +219,7 @@ public class VersionRangeRule
       localIssues.add(
           new VersionRangeIssue(kind,
               artifact.getArtifactId(),
-              "version",
+              VERSION,
               artifact.getVersion(),
               "Unable to detect version of " + kind + " " + artifact.getGroupId() + ":" + artifact
                   .getArtifactId() + ":" + artifact.getVersion()));
@@ -237,7 +235,7 @@ public class VersionRangeRule
       localIssues.add(
           new VersionRangeIssue(kind,
               artifactId,
-              "version",
+              VERSION,
               "",
               "Version of GAV " + groupId + ":" + artifactId + ":"
                   + version
@@ -245,11 +243,22 @@ public class VersionRangeRule
       return localIssues;
     }
 
+    if (version.contains("-SNAPSHOT")) {
+      localIssues.add(
+          new VersionRangeIssue(kind,
+              artifactId,
+              VERSION,
+              "",
+              "GAV " + groupId + ":" + artifactId + ":"
+                  + version
+                  + " is SNAPSHOT"));
+    }
+
     if (version.contains(",")) {
       localIssues.add(
           new VersionRangeIssue(kind,
               artifactId,
-              "version",
+              VERSION,
               version,
               "Version of GAV " + groupId + ":" + artifactId + ":"
                   + version
@@ -257,13 +266,14 @@ public class VersionRangeRule
     }
     if (groupId.startsWith("edu.mayo")) {
       if (!version.matches(PATTERN)) {
-
         localIssues.add(
             new VersionRangeIssue(kind,
                 artifactId,
-                "version",
+                VERSION,
                 version,
                 "Policies require MAJOR.MINOR.PATCH versions - found " + version));
+      } else {
+        // 3rd party dependencies may not follow SemVer patterns
       }
     }
     return localIssues;

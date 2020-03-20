@@ -1,6 +1,7 @@
 package edu.mayo.kmdp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import mock.MockMaven;
 import org.apache.maven.project.MavenProject;
@@ -27,6 +28,21 @@ public class TestParse {
     assertEquals("(3.3.0,3.4.0)",p.getParentArtifact().getBaseVersion());
 
     assertEquals("pom", p.getParent().getPackaging());
+  }
+
+  @Test
+  public void testProjectParseWithSnapshot() {
+    MavenProject p = maven.getProject("org.foo:snapParent:1.0.0-SNAPSHOT:pom" );
+
+    assertEquals("org.foo", p.getGroupId());
+    assertEquals("snapParent", p.getArtifactId());
+    assertEquals("1.0.0-SNAPSHOT", p.getVersion());
+
+    assertEquals(2, p.getDependencies().size());
+    assertEquals(1, p.getDependencyManagement().getDependencies().size());
+    assertTrue(p.getPluginManagement().getPlugins().stream()
+        .anyMatch(plugin -> plugin.getArtifactId().equalsIgnoreCase("fake_plugin3")));
+    assertEquals(1, p.getBuild().getPlugins().size());
   }
 
 
