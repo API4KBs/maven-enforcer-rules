@@ -7,7 +7,7 @@
   <!-- Project GAV -->
   <groupId>edu.mayo.kmdp</groupId>
   <artifactId>kmdp-mvn-enforcer-rules</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4-SNAPSHOT</version>
 
   <!-- Project Packaging -->
   <packaging>jar</packaging>
