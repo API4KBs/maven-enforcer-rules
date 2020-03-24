@@ -61,8 +61,8 @@ steps:
       # Create release version
       git checkout -b "release-$env:MVN_ENFORCER_RELEASE_VERSION"
       # mvn set version of release branch root pom and then clean install
-      mvn versions:set "-DnewVersion=$env:MVN_ENFORCER_RELEASE_VERSION"
-      mvn clean install -Prelease
+      mvn versions:set "-DnewVersion=$env:MVN_ENFORCER_RELEASE_VERSION" --no-transfer-progress 
+      mvn clean install -Prelease --no-transfer-progress 
       Write-Host ------ Ending Checkout ------
   env:
     MVN_ENFORCER_RELEASE_VERSION: $(tier0MvnEnforcerReleaseVersion)
@@ -80,8 +80,8 @@ steps:
       # Check develop branch to rebase
       git checkout develop
       git rebase "release-$env:MVN_ENFORCER_RELEASE_VERSION"
-      mvn versions:set "-DnewVersion=$env:MVN_ENFORCER_NEW_DEV_VERSION" -DallowSnapshots=true
-      mvn clean install 
+      mvn versions:set "-DnewVersion=$env:MVN_ENFORCER_NEW_DEV_VERSION" -DallowSnapshots=true --no-transfer-progress 
+      mvn clean install --no-transfer-progress 
       Write-Host ------ Ending Checkout ------
   env:
     MVN_ENFORCER_RELEASE_VERSION: $(tier0MvnEnforcerReleaseVersion)
