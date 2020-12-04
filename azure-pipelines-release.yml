@@ -1,24 +1,30 @@
 ## KMDP Release Candidate Pipeline
-## KMDP MVN Enforcer Rules
+## KMDP Maven Enforcer Rules
 
+# Sets Virtual Machine to Run Pipeline on
 pool:
   vmImage: 'ubuntu-latest'
 
+# Gets Variables from Azure DevOps Library
 variables: 
   - group: kmdp-platform-variables
 
 steps:
-
 # ------------------ PIPELINE STEPS  ------------------
+# Outputs pipeline steps have started
 - script: |
-    echo Starting KMDP Release Candidate MVN Enforcer Rules Branches!
-  displayName: 'Pipeline Steps Started'
+    echo Starting Develop Branch Build Pipeline!
+    echo Project :: KMDP Maven Enforcer Rules : Release Candidate Pipeline
+  displayName: 'Starting Pipeline Steps'
 
+# Sets Git Credentials on the VM set from variable group
+# $env:GIT_REDIRECT_STDERR = '2>&1' prevents unwanted errors
 - task: PowerShell@2
   displayName: 'Git Config User'
   inputs:
     targetType: 'inline'
     script: |
+      $env:GIT_REDIRECT_STDERR = '2>&1'
       git config --global user.email "$env:GIT_USER_EMAIL"
       git config --global user.name "$env:GIT_USER_NAME"
       Write-Host Email: "$env:GIT_USER_EMAIL"
@@ -27,9 +33,10 @@ steps:
     GIT_USER_EMAIL: $(gitUserEmail)
     GIT_USER_NAME: $(gitUserName)
 
-# Download Secure Settings m2 File
+# Gets .m2 Settings File from Azure DevOps Library
+# Downloads File for use in Pipeline
 - task: DownloadSecureFile@1
-  displayName: 'Download Secure m2'
+  displayName: 'Downloads Secure .m2 Settings File'
   name: settingsxml
   inputs:
     secureFile: settings-dev.xml
@@ -49,6 +56,17 @@ steps:
   inputs:
     artifactsFeeds: 'KMD'
 
+# Sets JDK 11 for Pipeline
+# Runs Maven Goal: validate
+- task: Maven@3
+  displayName: 'Sets Pipeline to JDK 11'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'validate'
+    options: '-ntp'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+
 # Create Release Branch 
 - task: PowerShell@2
   displayName: 'MVN Enforcer Rules Checkout Release Candidate'
@@ -61,8 +79,8 @@ steps:
       # Create release version
       git checkout -b "release-$env:MVN_ENFORCER_RELEASE_VERSION"
       # mvn set version of release branch root pom and then clean install
-      mvn versions:set "-DnewVersion=$env:MVN_ENFORCER_RELEASE_VERSION" --no-transfer-progress 
-      mvn clean install -Prelease --no-transfer-progress 
+      mvn versions:set "-DnewVersion=$env:MVN_ENFORCER_RELEASE_VERSION" -ntp 
+      mvn clean install -Prelease -ntp
       Write-Host ------ Ending Checkout ------
   env:
     MVN_ENFORCER_RELEASE_VERSION: $(tier0MvnEnforcerReleaseVersion)
@@ -80,8 +98,8 @@ steps:
       # Check develop branch to rebase
       git checkout develop
       git rebase "release-$env:MVN_ENFORCER_RELEASE_VERSION"
-      mvn versions:set "-DnewVersion=$env:MVN_ENFORCER_NEW_DEV_VERSION" -DallowSnapshots=true --no-transfer-progress 
-      mvn clean install --no-transfer-progress 
+      mvn versions:set "-DnewVersion=$env:MVN_ENFORCER_NEW_DEV_VERSION" -DallowSnapshots=true -ntp
+      mvn clean install -ntp
       Write-Host ------ Ending Checkout ------
   env:
     MVN_ENFORCER_RELEASE_VERSION: $(tier0MvnEnforcerReleaseVersion)
@@ -108,6 +126,7 @@ steps:
     SYSTEM_ACCESSTOKEN: $(system.accesstoken)
 
 # ------------------ END PIPELINE  ------------------
+# Outputs pipeline steps have ended
 - script: |
-    echo Ending Release Candidate MVN Enforcer Rules Pipeline!
-  displayName: 'Pipeline Steps Ended' 
+    echo Ending Release Candidate Branch Pipeline!
+  displayName: 'Ending Pipeline Steps'
