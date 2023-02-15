@@ -39,6 +39,7 @@ public class VersionRangeRule
     implements EnforcerRule {
 
   private static final String PATTERN = "\\d+\\.\\d+\\.\\d+(.+)?";
+  private static final String REVISIONPATTERN = "${revision}";
   private static final String VERSION = "version";
 
   public void execute(EnforcerRuleHelper helper)
@@ -116,7 +117,7 @@ public class VersionRangeRule
       VersionRangeReport localIssues) {
 
     if (property.contains("kmdp") || property.contains("knew")) {
-      if (!propertyValue.matches(PATTERN)) {
+      if (!isVersionPatterns(propertyValue)) {
         localIssues.add(
             new VersionRangeIssue(kind,
                 artifactId,
@@ -265,7 +266,7 @@ public class VersionRangeRule
                   + " should not be range-based"));
     }
     if (groupId.startsWith("edu.mayo")) {
-      if (!version.matches(PATTERN)) {
+      if (!isVersionPatterns(version)) {
         localIssues.add(
             new VersionRangeIssue(kind,
                 artifactId,
@@ -287,7 +288,9 @@ public class VersionRangeRule
     return false;
   }
 
-  public boolean isResultValid(EnforcerRule rule) {
-    return false;
+  public boolean isResultValid(EnforcerRule rule) { return false; }
+
+  public boolean isVersionPatterns(String version) {
+    return version.matches(PATTERN) || version.equals(REVISIONPATTERN);
   }
 }
